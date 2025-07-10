@@ -38,9 +38,9 @@ def scan_directory(path, parent_dict):
 
 def remove_yaml_extension(file_name):
     """
-    This function takes a file name as an argument. If the file name ends with 
-    '.yaml' or '.yml', it removes that extension and returns the file name without 
-    it. If the file name does not end with '.yaml' or '.yml', it returns the 
+    This function takes a file name as an argument. If the file name ends with
+    '.yaml' or '.yml', it removes that extension and returns the file name without
+    it. If the file name does not end with '.yaml' or '.yml', it returns the
     file name unchanged.
 
     :param file_name: String, name of the file
@@ -52,12 +52,12 @@ def remove_yaml_extension(file_name):
         return file_name[:-4]  # Removing '.yml'
     else:
         return file_name  # Return the original file name if no yaml extension
-    
+
 def ensure_directory_exists(directory):
     """
     Ensure that a directory exists.
     If the directory does not exist, create it.
-    
+
     :param directory: Path to the directory
     """
     if not os.path.exists(directory):
@@ -70,9 +70,10 @@ def process_template_content(input_file, variables):
     :param input_file: path to the input template file. Relative to this script's location
     :param variables: a dictionary where keys are placeholder names and values are the actual values
     """
-    with open(os.path.dirname(os.path.abspath(__file__)) + input_file, 'r') as file:
+    template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), input_file)
+    with open(template_path, 'r') as file:
         template = file.read()
-    
+
     return template.format(**variables)
 
 
@@ -86,13 +87,13 @@ def process_template(input_file, output_file, variables):
     """
     print('[+] Writing file: '+output_file)
     content = process_template_content(input_file, variables)
-    
+
     with open(output_file, 'w+') as file:
         file.write(content)
 
 def name_to_slug(input_string):
     """
-    This function takes a string, converts it to lowercase, removes all special characters except for whitespace, 
+    This function takes a string, converts it to lowercase, removes all special characters except for whitespace,
     and replaces whitespace with hyphens.
 
     :param input_string: String, the string to process
@@ -124,10 +125,10 @@ def levelid_to_level(nested_dict,level_id):
         if plvvalue['id'] == level_id:
             # Now find the matching maturity level for this practice level
             for mlvkey,mlvvalue in nested_dict['maturity_levels'].items():
-                if mlvvalue['id'] == plvvalue['maturitylevel']:
+                if mlvvalue['id'] == plvvalue['maturityLevel']:
                     # Return the level number
                     return mlvvalue['number']
-                
+
 def fix_indent(text, tab_count=1):
     # Replace each tab count with the appropriate number of spaces
     indentation = ' ' * (4 * tab_count)
@@ -140,7 +141,7 @@ def fix_bool(variable):
         return 'Yes' if variable else 'No'
     else:
         return variable
-                
+
 # Main script.
 # It parses command line arguments, creates a new nested dictionary,
 # then scans the directory provided by the command line argument and prints the resulting dictionary.
@@ -148,7 +149,7 @@ if __name__ == "__main__":
     # Parse command line args
     args = parse_arguments()
     # Create a nested dictionary containing directory structure and YAML file contents
-    nested_dict = create_nested_dict() 
+    nested_dict = create_nested_dict()
     scan_directory(args.input, nested_dict)
     # Print nested dictionary (REMOVE)
     #pp.pprint(dict(nested_dict))
@@ -294,7 +295,7 @@ if __name__ == "__main__":
                 for qkey,qvalue in nested_dict['questions'].items():
                     if actvalue['id'] == qvalue['activity']:
                         question = qvalue['text']
-                        answer_set_id = qvalue['answerset']
+                        answer_set_id = qvalue['answerSet']
                         criteria = ''
                         for critvalue in qvalue['quality']:
                             criteria += '- '+critvalue+'\n'
